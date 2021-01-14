@@ -7,16 +7,27 @@ import textwrap
 
 
 class ProjectGenerator:
+    """ Simple class for generating a preset folder heirarchy"""
+
     def __init__(self, projectname):
+        """__init__ [Initializer for ProjectGenerator with a projectName]
+
+        Args:
+            projectname ([string]): [Name for the project/root directory]
+        """
         self.projectname = projectname
 
     def create(self):
+        """create [Entry method that will generate the folder heirarchy]
+        """
         self.createdirectorystructure()
         self.writeconfigtemplate()
         self.writeservicetemplate()
         self.writemaindotgo()
 
     def createdirectorystructure(self):
+        """createdirectorystructure generates required folders
+        """
         dirs = [f'./{self.projectname}',
                 f'./{self.projectname}/src/{self.projectname}',
                 f'./{self.projectname}/config',
@@ -28,6 +39,8 @@ class ProjectGenerator:
                 os.makedirs(dir)
 
     def writemaindotgo(self):
+        """writemaindotgo creates a simple main.go inside src/projectName
+        """
         body = '''
         package main
         import "fmt"
@@ -40,7 +53,8 @@ class ProjectGenerator:
             outfile.write(textwrap.dedent(body))
 
     def writeconfigtemplate(self):
-
+        """writeconfigtemplate writes a sample config.json under config folder
+        """
         data = {
             "svc": f'{self.projectname}',
             "ht": "localhost",
@@ -51,6 +65,8 @@ class ProjectGenerator:
             json.dump(data, outfile)
 
     def writeservicetemplate(self):
+        """writeservicetemplate writes a template .service file under etc/systemd/system
+        """
         with open(f'./{self.projectname}/etc/systemd/system/{projectname}.service', 'w') as outfile:
             lines = [
                 '[Unit]\n',
